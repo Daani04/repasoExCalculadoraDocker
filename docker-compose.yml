@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  app:
+    image: danii04/repaso_ex_calculadora_docker:latest
+    container_name: calculadora-web
+    ports:
+      - "80:80"
+    restart: always
