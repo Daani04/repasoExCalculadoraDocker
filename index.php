@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <option value="raizCuadrada">Raíz Cuadrada</option>
         </select>
         <br>
-        <button type="submit">Calcular</button>
+        <button type="submit">Calcularr</button>
     </form>
 
     <?php if ($mensajeError): ?>
