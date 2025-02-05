@@ -45,8 +45,23 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_KEY }}
           script: |
-            cd ~/deploy
+            # Instalar Docker Compose si no está disponible
+            if ! [ -x "$(command -v docker-compose)" ]; then
+              echo 'Docker Compose no está instalado. Instalando...'
+              sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            else
+              echo 'Docker Compose ya está instalado.'
+            fi
+
+            # Asegurarse de que el socket de Docker tenga permisos adecuados
             sudo chmod 666 /var/run/docker.sock
+
+            # Detener y eliminar cualquier contenedor existente
             docker-compose down || true
+
+            # Descargar la nueva imagen
             docker-compose pull
+
+            # Levantar el contenedor con la nueva imagen
             docker-compose up -d
