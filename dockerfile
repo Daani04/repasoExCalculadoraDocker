@@ -1,17 +1,23 @@
-# Usar una imagen base de PHP con Apache
-FROM php:8.3-apache
+# Imagen base de Node
+FROM node:18-alpine
 
-# Copiar los archivos de la aplicación al contenedor
-COPY . /var/www/html/
+# Directorio de trabajo
+WORKDIR /app
 
-# Instalar Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Copiar package.json y package-lock.json
+COPY package*.json ./
 
-# Instalar dependencias de Composer
-RUN composer install --no-dev --optimize-autoloader
+# Instalar dependencias
+RUN npm install
 
-# Exponer el puerto 80
-EXPOSE 80
+# Copiar el resto de archivos
+COPY . .
 
-# Comando para iniciar Apache
-CMD ["apache2-foreground"]
+# Construir la aplicación
+RUN npm run build
+
+# Exponer el puerto
+EXPOSE 3000
+
+# Comando para ejecutar la aplicación
+CMD ["npm", "start"] 
